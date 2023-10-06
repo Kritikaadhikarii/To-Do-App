@@ -1,21 +1,21 @@
+const element = document.getElementById('currentTime');
+  
+setInterval(function () {
+  const currentDate = new Date();
+  element.innerText = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+}, 1000);
+
 // for current time
-
-
 let currentDate = new Date();
 let time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
 console.log(time);
 
 
 // for to-do list
-
-const list_el = document.getElementById("list");
-const create_button_el = document.getElementById("create");
-
-
+const lists = document.getElementById("list");
+const create_buttons = document.getElementById("create");
 let todos = [];
-
-
-create_button_el.addEventListener('click', CreateNewTodo);
+create_buttons.addEventListener('click', CreateNewTodo);
 
 
 function CreateNewTodo () {
@@ -29,14 +29,14 @@ function CreateNewTodo () {
     todos.unshift(item);
 
 
-    const { item_el, input_el } = CreateTodoElement(item);
+    const { items, inputs } = CreateTodoElement(item);
 
 
-    list_el.prepend(item_el);
+    lists.prepend(items);
 
 
-    input_el.removeAttribute("disabled");
-    input_el.focus();
+    inputs.removeAttribute("disabled");
+    inputs.focus();
 
 
     Save();
@@ -46,8 +46,8 @@ function CreateNewTodo () {
 
 
 function CreateTodoElement(item) {
-    const item_el = document.createElement("div");
-    item_el.classList.add("item");
+    const items = document.createElement("div");
+    items.classList.add("item");
 
 
     const checkbox = document.createElement("input");
@@ -56,37 +56,37 @@ function CreateTodoElement(item) {
 
 
     if (item.complete) {
-        item_el.classList.add("complete");
+        items.classList.add("complete");
     }
 
 
-    const input_el = document.createElement("input");
-    input_el.type = "text";
-    input_el.value = item.text;
-    input_el.setAttribute("disabled", "");
+    const inputs = document.createElement("input");
+    inputs.type = "text";
+    inputs.value = item.text;
+    inputs.setAttribute("disabled", "");
 
 
-    const actions_el = document.createElement("div");
-    actions_el.classList.add("actions");
+    const actionss = document.createElement("div");
+    actionss.classList.add("actions");
 
 
-    const edit_button_el = document.createElement("button");
-    edit_button_el.classList.add("material-icons");
-    edit_button_el.innerText = "edit";
+    const edit_buttons = document.createElement("button");
+    edit_buttons.classList.add("material-icons");
+    edit_buttons.innerText = "edit";
 
 
-    const remove_button_el = document.createElement("button");
-    remove_button_el.classList.add("material-icons", "remove-button");
-    remove_button_el.innerText = "remove_circle";
+    const remove_buttons = document.createElement("button");
+    remove_buttons.classList.add("material-icons", "remove-button");
+    remove_buttons.innerText = "remove_circle";
 
 
-    actions_el.append(edit_button_el);
-    actions_el.append(remove_button_el);
+    actionss.append(edit_buttons);
+    actionss.append(remove_buttons);
 
 
-    item_el.append(checkbox);
-    item_el.append(input_el);
-    item_el.append(actions_el);
+    items.append(checkbox);
+    items.append(inputs);
+    items.append(actionss);
 
 
     // EVENTS
@@ -95,9 +95,9 @@ function CreateTodoElement(item) {
 
 
         if (item.complete) {
-            item_el.classList.add("complete");
+            items.classList.add("complete");
         } else {
-            item_el.classList.remove("complete");
+            items.classList.remove("complete");
         }
 
 
@@ -105,35 +105,35 @@ function CreateTodoElement(item) {
     });
 
 
-    input_el.addEventListener("input", () => {
-        item.text = input_el.value;
+    inputs.addEventListener("input", () => {
+        item.text = inputs.value;
     });
 
 
-    input_el.addEventListener("blur", () => {
-        input_el.setAttribute("disabled", "");
+    inputs.addEventListener("blur", () => {
+        inputs.setAttribute("disabled", "");
         Save();
     });
 
 
-    edit_button_el.addEventListener("click", () => {
-        input_el.removeAttribute("disabled");
-        input_el.focus();
+    edit_buttons.addEventListener("click", () => {
+        inputs.removeAttribute("disabled");
+        inputs.focus();
     });
 
 
-    remove_button_el.addEventListener("click", () => {
+    remove_buttons.addEventListener("click", () => {
         todos = todos.filter(t => t.id != item.id);
 
 
-        item_el.remove();
+        items.remove();
 
 
         Save();
     });
 
 
-    return { item_el, input_el, edit_button_el, remove_button_el }
+    return { items, inputs, edit_buttons, remove_buttons }
 }
 
 
@@ -145,10 +145,10 @@ function DisplayTodos() {
         const item = todos[i];
 
 
-        const { item_el } = CreateTodoElement(item);
+        const { items } = CreateTodoElement(item);
 
 
-        list_el.append(item_el);
+        lists.append(items);
     }
 }
 
